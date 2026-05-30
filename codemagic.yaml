@@ -1,6 +1,6 @@
 workflows:
   android-workflow:
-    name: CalcMaster Quick Build (Hack Mode)
+    name: CalcMaster Build (Fixed)
 
     max_build_duration: 60
 
@@ -8,19 +8,20 @@ workflows:
       java: 17
 
     scripts:
-      - name: Check project
-        script: ls -la
+      - name: Show project structure
+        script: ls -R
 
-      - name: Set execute permission (ignore error)
+      - name: Make gradlew executable (safe)
         script: chmod +x gradlew || true
 
-      - name: Try Gradle Wrapper
-        script: ./gradlew clean || echo "No gradlew found, skipping"
+      - name: Clean project
+        script: gradle clean || ./gradlew clean || true
 
-      - name: Build using system Gradle (fallback)
-        script: gradle assembleDebug || echo "Gradle build attempted"
+      - name: Build Debug APK (Primary)
+        script: gradle assembleDebug
 
     artifacts:
+      - app/build/outputs/apk/debug/app-debug.apk
       - app/build/outputs/**/*.apk
 
     publishing:
