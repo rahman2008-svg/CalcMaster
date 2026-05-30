@@ -1,0 +1,15 @@
+workflows:
+  android-workflow:
+    name: CalcMaster Build
+    environment:
+      vars:
+        JAVA_VERSION: 17
+    scripts:
+      - name: Set up dependencies
+        script: ./gradlew clean
+
+      - name: Build APK
+        script: ./gradlew assembleDebug
+
+    artifacts:
+      - app/build/outputs/**/*.apk
