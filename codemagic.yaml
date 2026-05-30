@@ -7,26 +7,32 @@ workflows:
     environment:
       java: 17
 
+      vars:
+        GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4096m"
+
     cache:
       cache_paths:
         - ~/.gradle/caches
         - ~/.gradle/wrapper
 
     scripts:
-      - name: Check files
+      - name: Checkout info
         script: ls -la
 
-      - name: Grant permission to gradlew
+      - name: Make gradlew executable
         script: chmod +x gradlew
 
       - name: Clean project
         script: ./gradlew clean
 
+      - name: Download dependencies
+        script: ./gradlew dependencies
+
       - name: Build Debug APK
         script: ./gradlew assembleDebug
 
     artifacts:
-      - app/build/outputs/**/*.apk
+      - app/build/outputs/apk/debug/*.apk
 
     publishing:
       email:
