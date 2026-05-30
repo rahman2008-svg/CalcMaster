@@ -1,39 +1,30 @@
 workflows:
   android-workflow:
-    name: CalcMaster Production Build
+    name: CalcMaster Fixed Build
 
     max_build_duration: 60
 
     environment:
       java: 17
 
-      vars:
-        GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4096m"
-
-    cache:
-      cache_paths:
-        - ~/.gradle/caches
-        - ~/.gradle/wrapper
-
     scripts:
-      - name: Show project structure
+      - name: Show project
         script: ls -R
 
-      - name: Grant execute permission
+      - name: Grant permission
         script: chmod +x gradlew
+
+      - name: Upgrade Gradle wrapper (IMPORTANT FIX)
+        script: ./gradlew wrapper --gradle-version 9.3.1
 
       - name: Clean project
         script: ./gradlew clean
 
-      - name: Download dependencies
-        script: ./gradlew dependencies
-
-      - name: Build Debug APK
+      - name: Build APK
         script: ./gradlew assembleDebug
 
     artifacts:
       - app/build/outputs/apk/debug/app-debug.apk
-      - app/build/outputs/**/*.apk
 
     publishing:
       email:
